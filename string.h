@@ -35,11 +35,15 @@ class string {
         // Assignment operator with an other string
         string& operator=(const string& other);
 
-        // Concatenation operator with a chain C
-        string operator+(const string& other) const;
+        // Concatenation operator with a string and a character (string + char)
+        string operator+(const char c) const;
+
+        // Concatenation operator with a string and a C-string (string + const char*)
+        string operator+(const char* cstr) const;
 
         // Method to print the chain tests
         void print() const;
+
 
     private:
         char* data_members_; // A pointer to a dynamically allocated array holding the actual characters of the string.

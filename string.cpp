@@ -1,6 +1,7 @@
 #include "string.h"
 #include <iostream>
 
+
 // Default constructor
 string::string() : data_members_(new char[1]), len_(0), capacity_(1) {
     data_members_[0] = '\0';  // Initializes the string as empty (null-terminated)
@@ -15,6 +16,7 @@ string::string(const string& other) : data_members_(new char[other.capacity_]), 
     }
     data_members_[len_] = '\0';  // Ensure the string is null-terminated
 }
+
 
 //Character Constructor
 string::string(char c) : data_members_(new char[2]), len_(1), capacity_(2) {
@@ -75,6 +77,7 @@ void string::clear() {
     capacity_ = 1;  // Resets the capacity to 1
 }
 
+
 // Assignment operator with a single character
 string& string::operator=(char c) {
     delete[] data_members_;  // Deallocates the current memory
@@ -108,29 +111,70 @@ string& string::operator=(const string& other) {
 }
 
 
-// Concatenation operator with a C-string
-string string::operator+(const string& other) const {
+// Concatenation operator with a string and a character (string + char)
+string string::operator+(const char c) const {
     // Calculate the total new length for the concatenation
-    size_t new_len = len_ + other.len_;  // Total length is the sum of both string lengths
+    size_t new_len = this->size() + 1;  // Add 1 for the new character
 
     // Allocate memory for the new concatenated string
     size_t new_capacity = new_len + 1;  // Include space for the null terminator
     char* new_data = new char[new_capacity];
 
-    // Copy the current string (this object) to the new buffer
-    for (size_t i = 0; i < len_; ++i) {
-        new_data[i] = data_members_[i];
+    // Copy the current string (this) into the new buffer
+    const char* this_cstr = this->c_str();  // Get the C-string of the current string
+    for (size_t i = 0; i < this->size(); ++i) {
+        new_data[i] = this_cstr[i];  // Copy each character from the current string
     }
 
-    // Copy the other string (other) into the new buffer
-    for (size_t i = 0; i < other.len_; ++i) {
-        new_data[len_ + i] = other.data_members_[i];
-    }
+    // Add the new character at the end
+    new_data[this->size()] = c;
 
-    // Add the null terminator at the end
+    // Null-terminate the string
     new_data[new_len] = '\0';
 
     // Create the result string and assign the new data to it
+    string result;
+    result.data_members_ = new_data;
+    result.len_ = new_len;
+    result.capacity_ = new_capacity;
+    
+    return result;  // Return the concatenated string
+}
+
+
+// Concatenation operator with a string and a C-string (string + const char*)
+string string::operator+(const char* cstr) const {
+    // Calculate the total new length for the concatenation
+    size_t new_len = this->size();  // Start with the length of the current string
+
+    // Calculate the length of the C-string (const char*)
+    size_t cstr_len = 0;
+    while (cstr[cstr_len] != '\0') {
+        ++cstr_len;
+    }
+
+    new_len += cstr_len;  // Add the length of the C-string to the total length
+
+    // Allocate memory for the new concatenated string
+    size_t new_capacity = new_len + 1;  // Include space for the null terminator
+    char* new_data = new char[new_capacity];
+
+    // Copy the current string (this) into the new buffer
+    const char* this_cstr = this->c_str();  // Get the C-string of the current string
+    for (size_t i = 0; i < this->size(); ++i) {
+        new_data[i] = this_cstr[i];  // Copy each character from the current string
+    }
+
+    // Copy the C-string (cstr) into the new buffer
+    size_t i = this->size();  // Start copying at the point after the current string
+    while (*cstr) {
+        new_data[i++] = *cstr++;  // Copy each character from the C-string
+    }
+
+    // Null-terminate the string
+    new_data[new_len] = '\0';
+
+    // Create a string result with the new data and length
     string result;
     result.data_members_ = new_data;
     result.len_ = new_len;
