@@ -12,17 +12,17 @@ class string {
         string(const string& other);
 
         // Character Constructor; initializes a string with a single char
-        string(char c);   
+        string(char c);
 
         // Constructor from a c-style
         string(const char* cstr);
 
         // Destructor
         ~string();
-        
+
         // Method to get the C-string chain
         const char* c_str() const;
-        
+
         // Method to get the chain size
         size_t size() const;
 
@@ -36,7 +36,7 @@ class string {
         string& operator=(const string& other);
 
         // Concatenation operator with a chain C
-        string operator+(const string& other, const char* cstr);
+        string operator+(const string& other) const;
 
         // Method to print the chain tests
         void print() const;
