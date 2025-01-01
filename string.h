@@ -1,55 +1,46 @@
 #ifndef STRING_H    // Checks if STRING_H hasn't been defined yet
-#define STRING_H    // ifndef, defines STRING_H
+#define STRING_H    // if not def, defines STRING_H
 
 #include <cstddef> // Defines size_t
 
 class string {
     public:
-        // Default Constructor
-        string() ;
 
-        // Copy Constructor
-        string(const string& other);
+        //CONSTRUCTORS
+        string(); // Default Constructor
+        string(const string& other); // Copy Constructor
+        string(char c); // Character Constructor
+        string(const char* cstr); // Constructor from a C-style string
 
-        // Character Constructor; initializes a string with a single char
-        string(char c);
-
-        // Constructor from a c-style
-        string(const char* cstr);
-
-        // Destructor
+        //DESTRUCTOR
         ~string();
 
-        // Method to get the C-string chain
-        const char* c_str() const;
+        //METHODS
+        const char* c_str() const; // Get the C-string representation
+        size_t size() const; // Get the current size of the string
+        size_t length() const; // Alias for size()
+        size_t max_size() const; // Get the maximum potential size
+        void resize(size_t new_size, char fill_char = '\0'); // Resize the string
+        void clear(); // Clear the string
 
-        // Method to get the chain size
-        size_t size() const;
+        //ASSIGNMENT OPERATORS
+        string& operator=(char c); // Assign a single character
+        string& operator=(const string& other); // Assign another string
 
-        // Method to clear the chain
-        void clear();
-
-        //Assignment operator with one character
-        string& operator=(char c);
-
-        // Assignment operator with an other string
-        string& operator=(const string& other);
-
-        // Concatenation operator with a string and a character (string + char)
-        string operator+(const char c) const;
-
-        // Concatenation operator with a string and a C-string (string + const char*)
-        string operator+(const char* cstr) const;
+        //CONCATENATION OPERATORS
+        string operator+(const char c) const; // Concatenate with a single character
+        string operator+(const char* cstr) const; // Concatenate with a C-string
+        string operator+(const string& other) const; // Concatenate with another string
 
         // Method to print the chain tests
         void print() const;
 
 
     private:
+
         char* data_members_; // A pointer to a dynamically allocated array holding the actual characters of the string.
         size_t len_; // The length of the string
         size_t capacity_;  // The total allocated memory size for the string (max. number of characters before memory reallocation)
-
 
 };
 

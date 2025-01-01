@@ -56,17 +56,17 @@ string::~string() {
 }
 
 
+////METHODS
+
 // get the C-string representation of the string object
 const char* string::c_str() const {
     return data_members_;  // Returns the character array (C-string)
 }
 
-
 // Get the length of the string (not including the null terminator)
 size_t string::size() const {
     return len_;  // Returns the length of the string
 }
-
 
 // Resets the string to be empty
 void string::clear() {
@@ -77,6 +77,44 @@ void string::clear() {
     capacity_ = 1;  // Resets the capacity to 1
 }
 
+// Alias for size()
+size_t string::length() const {
+    return size();
+}
+
+//Get the maximal potential size
+size_t string::max_size() const {
+    return 100;
+}
+
+//Resize the string
+void string::resize(size_t new_size, char fill_char) {
+    if (new_size > max_size()) {
+        std::cerr << "Error: New size exceeds maximum size." << std::endl;
+        return;
+    }
+
+    char* new_data = new char[new_size + 1]; // +1 for null terminator
+    size_t copy_length = (new_size < len_) ? new_size : len_;
+
+    for (size_t i = 0; i < copy_length; ++i) {
+        new_data[i] = data_members_[i];
+    }
+
+    for (size_t i = copy_length; i < new_size; ++i) {
+        new_data[i] = fill_char;
+    }
+
+    new_data[new_size] = '\0';
+
+    delete[] data_members_;
+    data_members_ = new_data;
+    len_ = new_size;
+    capacity_ = new_size + 1;
+}
+
+
+////ASSIGNEMENT OPERATORS
 
 // Assignment operator with a single character
 string& string::operator=(char c) {
@@ -88,7 +126,6 @@ string& string::operator=(char c) {
     capacity_ = 2;  // Sets capacity to 2 (1 character + null terminator)
     return *this;  // Returns the current object to allow for chaining of assignments
 }
-
 
 // Assignment operator with another string (copy assignment)
 string& string::operator=(const string& other) {
@@ -110,6 +147,8 @@ string& string::operator=(const string& other) {
     return *this;  // Return *this to allow for chaining of assignments
 }
 
+
+////CONCATENATION OPERATORS
 
 // Concatenation operator with a string and a character (string + char)
 string string::operator+(const char c) const {
@@ -137,10 +176,9 @@ string string::operator+(const char c) const {
     result.data_members_ = new_data;
     result.len_ = new_len;
     result.capacity_ = new_capacity;
-    
+
     return result;  // Return the concatenated string
 }
-
 
 // Concatenation operator with a string and a C-string (string + const char*)
 string string::operator+(const char* cstr) const {
@@ -181,4 +219,9 @@ string string::operator+(const char* cstr) const {
     result.capacity_ = new_capacity;
 
     return result;  // Return the concatenated string
+}
+
+// Concatenation operator with another string
+string string::operator+(const string& other) const {
+    return *this + other.c_str();
 }
