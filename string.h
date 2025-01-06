@@ -20,17 +20,21 @@ class string {
         size_t size() const; // Get the current size of the string
         size_t length() const; // Alias for size()
         size_t max_size() const; // Get the maximum potential size
+        size_t capacity() const;              // Returns the current allocated capacity
+        bool empty() const;
+        void reserve(size_t new_capacity);    // Reserves memory for a specified capacity
         void resize(size_t new_size, char fill_char = '\0'); // Resize the string
         void clear(); // Clear the string
 
         //ASSIGNMENT OPERATORS
         string& operator=(char c); // Assign a single character
         string& operator=(const string& other); // Assign another string
+        string& operator=(const char* cstr); // Assigns a C-string to the string
 
         //CONCATENATION OPERATORS
-        string operator+(const char c) const; // Concatenate with a single character
-        string operator+(const char* cstr) const; // Concatenate with a C-string
-        string operator+(const string& other) const; // Concatenate with another string
+        string operator+(const char c) const; // Concatenates a single character
+        string operator+(const char* cstr) const; // Concatenates a C-string
+        string operator+(const string& other) const; // Concatenates another string object
 
         // Method to print the chain tests
         void print() const;
